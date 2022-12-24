@@ -1,0 +1,26 @@
+version: 2.1
+orbs:
+  node: circleci/node@5.0.2
+jobs:
+  build:
+    docker:
+      - image: cimg/node:18.7.0
+    steps:
+      - node/install
+      - checkout
+      - run:
+          name: Install node Packages
+          command: |
+            npm install
+      # - run:
+      #     name: Lint code
+      #     command: |
+      #       npm run backend:lint
+      - run:
+          name: Build Code
+          command: |
+            npm run postinstall
+      # - run:
+      #     name: Test Code
+      #     command: |
+      #       npm run backend:test
