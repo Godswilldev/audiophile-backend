@@ -5,12 +5,10 @@ import morgan from "morgan";
 import xss from "xss-clean";
 import compression from "compression";
 import cookieParser from "cookie-parser";
-import swaggerUI from "swagger-ui-express";
 import rateLimit from "express-rate-limit";
 import authRouter from "./routes/auth.route";
 import usersRouter from "./routes/user.route";
 import express, { Application } from "express";
-import swaggerDocs from "./utils/swagger.utils";
 import ordersRouter from "./routes/orders.route";
 import reviewsRouter from "./routes/review.route";
 import mongoSanitize from "express-mongo-sanitize";
@@ -74,7 +72,6 @@ app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/orders", ordersRouter);
 app.use("/api/v1/reviews", reviewsRouter);
 app.use("/api/v1/products", productsRouter);
-app.use("/", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 // Invalid Routes / not found route error handler
 app.all("*", (req, _res, next) =>

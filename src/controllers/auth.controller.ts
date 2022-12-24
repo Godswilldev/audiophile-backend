@@ -10,7 +10,7 @@ import {
   sendForgotPasswordToken,
 } from "../middlewares/auth.middleware";
 import { AppError } from "../middlewares/handleAppError.middleware";
-import { SendEmail } from "./../utils/email.util";
+import { Email } from "./../utils/email.util";
 
 // signup user
 export const signUp = async (req: Request, res: Response, next: NextFunction) => {
@@ -226,8 +226,9 @@ export const logout = async (req: Request, res: Response) => {
 };
 
 export const testEmail = async (req: Request, res: Response) => {
-  const { email, name } = req.body;
+  const { email, firstname } = req.body;
+  const SendEmail = new Email({ email, firstname });
 
-  await SendEmail({ email, name });
+  await SendEmail.sendWelcome();
   return res.status(201).json({ status: "Successful", message: "Email Sent" });
 };
