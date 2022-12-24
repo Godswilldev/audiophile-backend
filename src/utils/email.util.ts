@@ -4,7 +4,14 @@
 import "dotenv/config";
 import nodemailer from "nodemailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
-const { EMAIL_USERNAME, EMAIL_PASSWORD, NODE_ENV } = process.env;
+const {
+  EMAIL_USERNAME,
+  EMAIL_PASSWORD,
+  NODE_ENV,
+  SENDINBLUE_SMTP_Server,
+  SENDINBLUE_PASSWORD,
+  SENDINBLUE_Login,
+} = process.env;
 
 // EMAIL CLASS
 export const Email = class {
@@ -23,11 +30,11 @@ export const Email = class {
   private readonly newTransport = (): nodemailer.Transporter<SMTPTransport.SentMessageInfo> => {
     if (NODE_ENV === "production") {
       return nodemailer.createTransport({
-        host: "smtp.mailgun.org",
+        host: SENDINBLUE_SMTP_Server,
         port: 465,
         auth: {
-          user: "audiophile@sandbox4d0c845af95e4f178a6a14514cdcd471.mailgun.org",
-          pass: "ceb81ddbafbcfa5117371725384bdeac-eb38c18d-b916eeba",
+          user: SENDINBLUE_Login,
+          pass: SENDINBLUE_PASSWORD,
         },
       });
     } else {

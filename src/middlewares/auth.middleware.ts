@@ -7,6 +7,7 @@ import User from "../models/user.model";
 // import { Email } from "../utils/email.util";
 import { AppError } from "./handleAppError.middleware";
 import { Request, Response, NextFunction } from "express";
+import { Email } from "../utils/email.util";
 
 const { JWT_SECRET, JWT_EXPIRES_IN, NODE_ENV } = process.env;
 
@@ -148,7 +149,7 @@ export const semdEmailVerificationLink = async (
            <h1> ${emailToken} </h1> <span> is your Email Verification Code</span>
            <h4>Verification code is Valid for 10 minutes</h4>
     `;
-    // await new Email(user).send(html, "Welcome to Audiophile");
+    await new Email(user).send(html, "Welcome to Audiophile");
 
     return res
       .status(201)
@@ -171,7 +172,7 @@ export const sendForgotPasswordToken = async (
   try {
     // eslint-disable-next-line max-len
     const html = `<h2>${resetToken} is your password reset token.</h2><h4>Valid for 10 minutes</h4>`;
-    // await new Email(user).send(html, "Password Reset Token");
+    await new Email(user).send(html, "Password Reset Token");
 
     return res
       .status(200)

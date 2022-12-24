@@ -28,10 +28,10 @@ export const signUp = async (req: Request, res: Response, next: NextFunction) =>
 
   const emailToken = user.createEmailVerificationToken();
   await user.save({ validateBeforeSave: false });
-  // res.status(200).json({
-  //   status: "registration successful",
-  //   user,
-  // });
+  res.status(200).json({
+    status: "registration successful",
+    user,
+  });
   await semdEmailVerificationLink(req, res, next, { user, emailToken });
 };
 

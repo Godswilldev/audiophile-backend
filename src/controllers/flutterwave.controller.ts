@@ -3,7 +3,7 @@ import "dotenv/config";
 import axios from "axios";
 import { Response, Request, NextFunction } from "express";
 import Order from "../models/orders.model";
-// import { Email } from "../utils/email.util";
+import { Email } from "../utils/email.util";
 import { OrderStatus } from "../interface/orders.interface";
 import { AppError } from "../middlewares/handleAppError.middleware";
 
@@ -74,19 +74,19 @@ export const flwWebhook = async (req: Request, res: Response) => {
     // send an email
     const { email, firstname } = order.user;
 
-    // const SendEmail = new Email({ email, firstname });
+    const SendEmail = new Email({ email, firstname });
 
-    // SendEmail.send(
-    //   `Your order has been confirmed see details below: ${order.orderItems.forEach(
-    //     (o) =>
-    //       `<h3>${o.product.name}</h3> <img src=${o.product.image}/> <span>${o.product.price}</span>`
-    //   )}
+    SendEmail.send(
+      `Your order has been confirmed see details below: ${order.orderItems.forEach(
+        (o) =>
+          `<h3>${o.product.name}</h3> <img src=${o.product.image}/> <span>${o.product.price}</span>`
+      )}
 
-    //   <h2>TOTAL: ${order.grandTotal}</h2>
+      <h2>TOTAL: ${order.grandTotal}</h2>
 
-    //   `,
-    //   "Order Confirmed"
-    // );
+      `,
+      "Order Confirmed"
+    );
 
     return res.status(200).json({ status: "Order Confirmed and email has been sent" });
   }
