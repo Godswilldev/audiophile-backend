@@ -72,6 +72,7 @@ app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/orders", ordersRouter);
 app.use("/api/v1/reviews", reviewsRouter);
 app.use("/api/v1/products", productsRouter);
+app.get("/", (_req, res) => res.status(200).json({ message: "Welcome to Audiophile" }));
 
 // Invalid Routes / not found route error handler
 app.all("*", (req, _res, next) =>
