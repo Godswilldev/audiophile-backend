@@ -7,7 +7,7 @@ const handleCastErrorDB = (err: { path: any; value: any }) => {
 };
 
 const handleDuplicateFieldsDB = (err: { errmsg: { match: (arg0: RegExp) => any[] } }) => {
-  const message = "Email / Review Already Exist . Please use another Email!";
+  const message = "Email Already Exists. Please use another Email!";
   return new AppError(message, 400);
 };
 

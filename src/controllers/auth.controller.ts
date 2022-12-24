@@ -28,10 +28,6 @@ export const signUp = async (req: Request, res: Response, next: NextFunction) =>
 
   const emailToken = user.createEmailVerificationToken();
   await user.save({ validateBeforeSave: false });
-  res.status(200).json({
-    status: "registration successful",
-    user,
-  });
   await semdEmailVerificationLink(req, res, next, { user, emailToken });
 };
 
@@ -85,6 +81,10 @@ export const resendEmailConfirmationToken = async (
   const user = await User.findOne({ email });
   if (!user) {
     return next(new AppError("User not found", 401));
+  }
+
+  if (user.isEmailVerified) {
+    return next(new AppError("Email Already Verified", 403));
   }
   const emailToken = user.createEmailVerificationToken();
   await user.save({ validateBeforeSave: false });
