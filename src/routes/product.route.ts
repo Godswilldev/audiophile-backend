@@ -6,8 +6,8 @@ import { catchAsync } from "../middlewares/catchAsyncError.middleware";
 import { getProductInACategory } from "../controllers/product.controller";
 import {
   aliasTopProducts,
-  uploadTourPhotos,
-  resizeAndUploadTourPhotos,
+  uploadProductPhotos,
+  resizeAndUploadProductPhotos,
 } from "../middlewares/product.middleware";
 import {
   createProduct,
@@ -44,7 +44,13 @@ productsRouter
   // Get all products with queries (queries include select,sort, limit, skip )
   .get(catchAsync(getAllProducts))
   // create product, only admins and manager allowed
-  .post(catchAsync(protect), restrictTo([roles.admin, roles.manager]), catchAsync(createProduct));
+  .post(
+    catchAsync(protect),
+    restrictTo([roles.admin, roles.manager]),
+    uploadProductPhotos,
+    catchAsync(resizeAndUploadProductPhotos),
+    catchAsync(createProduct)
+  );
 
 productsRouter.route("/category/:category").get(catchAsync(getProductInACategory));
 
@@ -56,8 +62,8 @@ productsRouter
   .patch(
     catchAsync(protect),
     restrictTo([roles.admin, roles.manager]),
-    uploadTourPhotos,
-    catchAsync(resizeAndUploadTourPhotos),
+    uploadProductPhotos,
+    catchAsync(resizeAndUploadProductPhotos),
     catchAsync(updateProduct)
   )
   .delete(catchAsync(protect), restrictTo([roles.admin, roles.manager]), catchAsync(deleteProduct));

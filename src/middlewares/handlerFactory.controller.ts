@@ -21,7 +21,7 @@ export const deleteHandler =
 export const createHandler =
   (Model: typeof Reviews | typeof Product | typeof User) => async (req: Request, res: Response) => {
     const newP = await Model.create(req.body);
-    return res.status(201).json({ status: "Created Successfully", data: { data: newP } });
+    return res.status(201).json({ status: "Created Successfully", data: newP });
   };
 
 // CUSTOM UPDATE HANDLER FUNCTION

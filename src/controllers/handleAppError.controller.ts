@@ -55,11 +55,11 @@ export const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => 
   } else if (process.env.NODE_ENV === "production") {
     let error = { ...err };
 
-    if (error.name === "CastError") error = handleCastErrorDB(error);
-    if (error.code === 11000) error = handleDuplicateFieldsDB(error);
-    if (error.name === "ValidationError") error = handleValidationErrorDB(error);
-    if (error.name === "JsonWebTokenError") error = handleJsonWebTokenError();
-    if (error.name === "TokenExpiredError") error = handleTokenExpiredError();
+    if (err.name === "CastError") error = handleCastErrorDB(error);
+    if (err.code === 11000) error = handleDuplicateFieldsDB(error);
+    if (err.name === "ValidationError") error = handleValidationErrorDB(error);
+    if (err.name === "JsonWebTokenError") error = handleJsonWebTokenError();
+    if (err.name === "TokenExpiredError") error = handleTokenExpiredError();
 
     sendProdError(error, res);
   }

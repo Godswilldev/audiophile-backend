@@ -24,13 +24,15 @@ const multerFilter = (req: Request, file: Express.Multer.File, cb: multer.FileFi
 
 const upload = multer({ storage: multer.memoryStorage(), fileFilter: multerFilter });
 
-export const uploadTourPhotos = upload.fields([
+export const uploadProductPhotos = upload.fields([
   { name: "image", maxCount: 1 },
   { name: "productImageGallery", maxCount: 5 },
 ]);
 
+const generateRandomNumber = (): number => Math.floor(Math.random() * 1000 + 1);
+
 // IMAGE RESIZE AND UPLOAD MIDDLEWARE
-export const resizeAndUploadTourPhotos = async (
+export const resizeAndUploadProductPhotos = async (
   req: Request,
   _res: Response,
   next: NextFunction
@@ -40,7 +42,7 @@ export const resizeAndUploadTourPhotos = async (
     return next();
   }
 
-  const Key = `products/product-${req.params.id}-cover`;
+  const Key = `products/product-${generateRandomNumber()}-cover`;
 
   const ContentType = files.image[0].mimetype;
 
@@ -57,7 +59,7 @@ export const resizeAndUploadTourPhotos = async (
 
   await Promise.all(
     files.productImageGallery.map(async (file, index) => {
-      const Key = `products/product-${req.params.id}-${index}-productImageGallery`;
+      const Key = `products/product-${generateRandomNumber()}-${index}-productImageGallery`;
       const ContentType = file.mimetype;
 
       // resize the image

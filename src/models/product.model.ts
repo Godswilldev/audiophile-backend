@@ -10,7 +10,7 @@ const productSchema = new Schema<ProductProps, ProductsModel, {}>(
   {
     slug: String,
     new: { type: Boolean, default: true },
-    quantityInstock: {
+    quantityInStock: {
       type: Number,
       required: [true, "A product must tell how many of it is in stock"],
     },
@@ -38,9 +38,9 @@ const productSchema = new Schema<ProductProps, ProductsModel, {}>(
 
     ratingsAverage: {
       type: Number,
-      default: 0,
-      min: [1, "Review must be above 1.0"],
-      max: [5, "Review must be below 5.0"],
+      default: 1,
+      min: [1, "Rating must be above 1.0"],
+      max: [5, "Rating must be below 5.0"],
       set: (val: number) => Math.round(val * 10) / 10,
     },
 
