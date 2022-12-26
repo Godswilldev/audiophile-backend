@@ -9,12 +9,21 @@ export type ProductsModel = Model<ProductProps, {}, {}>;
 const productSchema = new Schema<ProductProps, ProductsModel, {}>(
   {
     slug: String,
+
     new: { type: Boolean, default: true },
+
     quantityInStock: {
       type: Number,
       required: [true, "A product must tell how many of it is in stock"],
     },
+
     inStock: { type: Boolean, default: true },
+
+    categoryImage: {
+      type: String,
+      required: [true, "A product must have a category Image"],
+    },
+
     name: {
       type: String,
       trim: true,
@@ -38,8 +47,8 @@ const productSchema = new Schema<ProductProps, ProductsModel, {}>(
 
     ratingsAverage: {
       type: Number,
-      default: 1,
-      min: [1, "Rating must be above 1.0"],
+      default: 0,
+      min: [0, "Rating must be above 0"],
       max: [5, "Rating must be below 5.0"],
       set: (val: number) => Math.round(val * 10) / 10,
     },

@@ -26,7 +26,8 @@ const upload = multer({ storage: multer.memoryStorage(), fileFilter: multerFilte
 
 export const uploadProductPhotos = upload.fields([
   { name: "image", maxCount: 1 },
-  { name: "productImageGallery", maxCount: 5 },
+  { name: "categoryImage", maxCount: 1 },
+  { name: "productImageGallery", maxCount: 3 },
 ]);
 
 const generateRandomNumber = (): number => Math.floor(Math.random() * 1000 + 1);
@@ -38,10 +39,15 @@ export const resizeAndUploadProductPhotos = async (
   next: NextFunction
 ) => {
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
-  if (!files.image || !files.productImageGallery) {
+
+  if (!files?.productImageGallery || !files?.image || !files?.categoryImage) {
     return next();
   }
 
+  console.log("greg3");
+  /**
+   * Image
+   */
   const Key = `products/product-${generateRandomNumber()}-cover`;
 
   const ContentType = files.image[0].mimetype;
@@ -54,7 +60,24 @@ export const resizeAndUploadProductPhotos = async (
 
   req.body.image = await uploadToS3({ Body, Key, ContentType });
 
-  // uploading multiple files
+  /**
+   * categoryImage
+   */
+  const Key2 = `products/product-${generateRandomNumber()}-categoryImage`;
+
+  const ContentType2 = files.categoryImage[0].mimetype;
+
+  const Body2 = await sharp(files.categoryImage[0].buffer)
+    .resize(2000, 1333)
+    .toFormat("webp")
+    .webp({ quality: 100 })
+    .toBuffer();
+
+  req.body.categoryImage = await uploadToS3({ Body: Body2, Key: Key2, ContentType: ContentType2 });
+
+  /**
+   * uploading multiple files
+   */
   req.body.productImageGallery = [];
 
   await Promise.all(

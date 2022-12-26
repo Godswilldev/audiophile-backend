@@ -35,7 +35,7 @@ export const updateHandler =
     if (!doc) {
       return next(new AppError("No document found with that id", 404));
     }
-    return res.status(201).json({ status: "Updated Successfully", data: { data: doc } });
+    return res.status(201).json({ status: "Updated Successfully", data: doc });
   };
 
 // CUSTOM GET HANDLER FUNCTION
@@ -52,5 +52,5 @@ export const getOneHandler =
       return next(new AppError("No document found with that id", 404));
     }
 
-    return res.status(200).json({ status: "success", data: { data: doc } });
+    return res.status(200).json({ status: "success", data: doc });
   };

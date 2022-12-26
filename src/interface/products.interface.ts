@@ -19,6 +19,7 @@ export interface ProductProps {
   productImageGallery: [string];
   ratingsAverage: number;
   ratingsQuantity: number;
+  categoryImage: string;
   createdAt: Date;
   category: productsCategories;
   includedItems: [{ quantity: number; item: string }];
