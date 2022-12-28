@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import valid from "validator";
 import { Schema, model, Model, Query, SchemaTypes } from "mongoose";
 import { UserProps, UserMethods, roles } from "../interface/user.interface";
+import moment from "moment";
 
 const { SALT_ROUNDS } = process.env;
 
@@ -111,7 +112,7 @@ userSchema.pre("save", async function (next) {
   if (!this.isModified("password") || this.isNew) {
     return next();
   }
-  this.passwordChangedAt = Date.now() - 1000;
+  this.passwordChangedAt = moment().subtract(10, "minutes");
 
   next();
 });
@@ -146,7 +147,7 @@ userSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(3).toString("hex");
   // create and save encrypted reset token to database
   this.passwordResetToken = crypto.createHash("sha256").update(resetToken).digest("hex");
-  this.passwordResetTokenExpires = Date.now() + 10 * 60 * 1000;
+  this.passwordResetTokenExpires = moment().add(10, "minutes");
   // send the unencrypted reset token to users email
   return resetToken;
 };
@@ -154,7 +155,7 @@ userSchema.methods.createPasswordResetToken = function () {
 userSchema.methods.createEmailVerificationToken = function () {
   const verificationToken = crypto.randomBytes(3).toString("hex");
   this.emailVerificationToken = crypto.createHash("sha256").update(verificationToken).digest("hex");
-  this.emailVerificationTokenExpires = Date.now() + 10 * 60 * 1000;
+  this.emailVerificationTokenExpires = moment().add(10, "minutes");
   return verificationToken;
 };
 

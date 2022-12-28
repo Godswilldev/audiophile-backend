@@ -11,6 +11,7 @@ import {
 } from "../middlewares/auth.middleware";
 import { AppError } from "../middlewares/handleAppError.middleware";
 import { Email } from "./../utils/email.util";
+import moment from "moment";
 
 // signup user
 export const signUp = async (req: Request, res: Response, next: NextFunction) => {
@@ -38,7 +39,7 @@ export const confirmEmail = async (req: Request, res: Response, next: NextFuncti
 
   const user = await User.findOne({
     emailVerificationToken: hashedToken,
-    emailVerificationTokenExpires: { $gt: Date.now() },
+    emailVerificationTokenExpires: { $gt: moment() },
   })
     .select("-password")
     .select("-passwordChangedAt");
@@ -161,7 +162,7 @@ export const resetPassword = async (req: Request, res: Response, next: NextFunct
 
   const user = await User.findOne({
     passwordResetToken: hashedToken,
-    passwordResetTokenExpires: { $gt: Date.now() },
+    passwordResetTokenExpires: { $gt: moment() },
   }).select("-passwordChangedAt");
 
   if (!user) {
@@ -221,7 +222,7 @@ export const updatePassword = async (req: Request, res: Response, next: NextFunc
 
 // LOGOUT PASSWORD
 export const logout = async (req: Request, res: Response) => {
-  res.cookie("jwt", "", { httpOnly: true, expires: new Date(Date.now() + 10 * 1000) });
+  res.cookie("jwt", "null", { httpOnly: true });
   return res.status(200).json({ status: "Logged Out Successfully" });
 };
 

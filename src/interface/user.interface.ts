@@ -1,3 +1,5 @@
+import { Moment } from "moment";
+
 export enum roles {
   user = "user",
   manager = "manager",
@@ -12,7 +14,7 @@ export interface UserProps {
   phoneNumber: string;
   password: string;
   passwordConfirm: string | undefined;
-  passwordChangedAt: Date | number;
+  passwordChangedAt: Date | number | Moment;
   role: roles;
   passwordResetToken: String | undefined;
   passwordResetTokenExpires: Date | undefined;

@@ -9,11 +9,11 @@ import { AppError } from "./handleAppError.middleware";
 import { Request, Response, NextFunction } from "express";
 import { Email } from "../utils/email.util";
 
-const { JWT_SECRET, JWT_EXPIRES_IN, NODE_ENV } = process.env;
+const { JWT_SECRET, NODE_ENV } = process.env;
 
 // FUNCTION TO SIGN THE JWT
 export const signJwt = (id: Types.ObjectId) =>
-  jwt.sign({ id }, JWT_SECRET as string, { expiresIn: JWT_EXPIRES_IN });
+  jwt.sign({ id }, JWT_SECRET as string, { expiresIn: "7d" });
 
 // FUNCTION TO PROTECT ROUTES
 export const protect = async (req: Request, res: Response, next: NextFunction) => {
@@ -63,7 +63,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
 // FUNCTION TO VERIFY USER TOKEN ON THE FRONTEND
 export const frontendVerifyCookie = async (req: Request, res: Response, next: NextFunction) => {
   let token;
-  
+
   if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
     token = req.headers.authorization?.split(" ")[1];
   } else if (req.cookies?.jwt) {
@@ -121,7 +121,7 @@ export const createSendToken = (user: any, statusCode: number, res: Response) =>
   res.cookie("jwt", token, {
     httpOnly: NODE_ENV === "production" ? true : false,
     secure: NODE_ENV === "production" ? true : false,
-    expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     sameSite: "none",
   });
 
