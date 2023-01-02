@@ -20,7 +20,7 @@ export const getUserOrder = async (req: Request, res: Response) => {
   return res.status(200).json({ status: "success", data: { order } });
 };
 
-// GET ONE ORDER
+// GET ALL ORDERS
 export const getAllOrders = async (req: Request, res: Response) => {
   const order = await Order.find();
   return res.status(200).json({ status: "success", data: { order } });

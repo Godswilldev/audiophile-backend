@@ -11,6 +11,7 @@ import { AppError } from "../middlewares/handleAppError.middleware";
 export const getCheckoutsession = async (req: Request, res: Response, next: NextFunction) => {
   const { orderItems, shippingInfo } = req.body;
   const user = req.user;
+  console.log({ orderItems, shippingInfo });
   if (!orderItems || !shippingInfo || orderItems?.length < 1) {
     return next(new AppError("Order must have either a shipping info or order items", 400));
   }
