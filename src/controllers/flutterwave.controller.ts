@@ -1,9 +1,9 @@
 /* eslint-disable max-len */
 import "dotenv/config";
 import axios from "axios";
-import { Response, Request, NextFunction } from "express";
 import Order from "../models/orders.model";
 import { Email } from "../utils/email.util";
+import { Response, Request, NextFunction } from "express";
 import { OrderStatus } from "../interface/orders.interface";
 import { AppError } from "../middlewares/handleAppError.middleware";
 
@@ -30,7 +30,7 @@ export const getCheckoutsession = async (req: Request, res: Response, next: Next
       tx_ref: order._id,
       amount: order.grandTotal,
       currency: "NGN",
-      redirect_url: "https://audiophile.vercel.app/", // TODO: REPLACE WITH WEBHOOK URL WHEN THE SITE IS LIVE
+      redirect_url: "https://audiophi.vercel.app/", // TODO: REPLACE WITH WEBHOOK URL WHEN THE SITE IS LIVE
 
       customer: {
         email: user.email,
