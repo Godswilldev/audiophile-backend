@@ -62,7 +62,8 @@ app.use(hpp());
 app.use(compression());
 
 // FLUTTERWAVE WEBHOOK
-app.post("/flw-checkout", express.raw({ type: "application/json" }), flwWebhook);
+// app.post("/flw-checkout", express.raw({ type: "application/json" }), flwWebhook);
+app.post("/flw-webhook", express.raw({ type: "application/json" }), flwWebhook);
 
 // SWAGGER
 
