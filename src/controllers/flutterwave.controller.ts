@@ -60,14 +60,14 @@ export const flwWebhook = async (req: Request, res: Response) => {
     return res.status(401).send("Webhook error");
   }
 console.log(req.body)
-  const { event, data } = req.body;
+  const { status, tx_ref:orderId} = req.body;
 
-  console.log({ event, data });
 
-  if (event === "charge.completed" || event === "completed") {
+
+  if (status === "successful") {
     // change order status to OrderStatus.confirmed,
 
-    const { tx_ref: orderId } = data;
+ 
 
     const order = await Order.findByIdAndUpdate(orderId, { orderStatus: OrderStatus.confirmed });
 
