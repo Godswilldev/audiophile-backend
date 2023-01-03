@@ -60,7 +60,7 @@ export const flwWebhook = async (req: Request, res: Response) => {
     return res.status(401).send("Webhook error");
   }
 console.log(req.body)
-  const { status, tx_ref:orderId} = req.body;
+  const { status, txRef:orderId} = req.body;
 
 
 
