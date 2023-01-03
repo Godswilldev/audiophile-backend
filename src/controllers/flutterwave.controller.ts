@@ -59,7 +59,7 @@ export const flwWebhook = async (req: Request, res: Response) => {
     // This request isn't from Flutterwave; discard
     return res.status(401).send("Webhook error");
   }
-
+console.log(req.body)
   const { event, data } = req.body;
 
   console.log({ event, data });
