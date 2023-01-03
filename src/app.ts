@@ -33,7 +33,8 @@ app.options("*", cors);
 app.use(helmet());
 
 // logging middleware
-process.env.NODE_ENV !== "production" && app.use(morgan("dev"));
+app.use(morgan("dev"));
+// process.env.NODE_ENV !== "production" && app.use(morgan("dev"));
 
 // rate limiting
 const limiter = rateLimit({
@@ -64,8 +65,6 @@ app.use(compression());
 // FLUTTERWAVE WEBHOOK
 // app.post("/flw-checkout", express.raw({ type: "application/json" }), flwWebhook);
 app.post("/flw-webhook", express.raw({ type: "application/json" }), flwWebhook);
-
-// SWAGGER
 
 // API Routes
 app.use("/api/v1/auth", authRouter);

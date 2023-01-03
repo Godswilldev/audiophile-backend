@@ -11,7 +11,7 @@ import { AppError } from "../middlewares/handleAppError.middleware";
 export const getCheckoutsession = async (req: Request, res: Response, next: NextFunction) => {
   const { orderItems, shippingInfo } = req.body;
   const user = req.user;
-  console.log({ orderItems, shippingInfo });
+
   if (!orderItems || !shippingInfo || orderItems?.length < 1) {
     return next(new AppError("Order must have either a shipping info or order items", 400));
   }
@@ -30,7 +30,8 @@ export const getCheckoutsession = async (req: Request, res: Response, next: Next
       tx_ref: order._id,
       amount: order.grandTotal,
       currency: "NGN",
-      redirect_url: `https://audiophi.vercel.app/user/my-orders/${order._id}`, // TODO: REPLACE WITH WEBHOOK URL WHEN THE SITE IS LIVE
+      redirect_url: "https://audiophi.vercel.app/user/my-orders", // TODO: REPLACE WITH WEBHOOK URL WHEN THE SITE IS LIVE
+      // redirect_url: "http://localhost:3000", // TODO: REPLACE WITH WEBHOOK URL WHEN THE SITE IS LIVE
 
       customer: {
         email: user.email,
@@ -84,8 +85,8 @@ export const flwWebhook = async (req: Request, res: Response) => {
       )}
 
       <h2>TOTAL: ${order.grandTotal}</h2>
-
       `,
+
       "Order Confirmed"
     );
 
