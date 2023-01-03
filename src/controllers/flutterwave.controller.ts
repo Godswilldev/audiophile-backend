@@ -62,6 +62,8 @@ export const flwWebhook = async (req: Request, res: Response) => {
 
   const { event, data } = req.body;
 
+  console.log({ event, data });
+
   if (event === "charge.completed" || event === "completed") {
     // change order status to OrderStatus.confirmed,
 
@@ -92,11 +94,9 @@ export const flwWebhook = async (req: Request, res: Response) => {
 
     return res.status(200).json({ status: "Order Confirmed and email has been sent" });
   } else {
-    return res
-      .status(500)
-      .json({
-        status: "failed",
-        message: "Event !== charge.completed Unable to complete transaction",
-      });
+    return res.status(500).json({
+      status: "failed",
+      message: "Event !== charge.completed Unable to complete transaction",
+    });
   }
 };
