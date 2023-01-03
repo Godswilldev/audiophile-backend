@@ -57,7 +57,7 @@ export const flwWebhook = async (req: Request, res: Response) => {
 
   if (!signature || signature !== secretHash) {
     // This request isn't from Flutterwave; discard
-    res.status(401).send("Webhook error");
+    return res.status(401).send("Webhook error");
   }
 
   const { event, data } = req.body;
@@ -70,7 +70,7 @@ export const flwWebhook = async (req: Request, res: Response) => {
     const order = await Order.findByIdAndUpdate(orderId, { orderStatus: OrderStatus.confirmed });
 
     if (!order) {
-      return;
+      return res.status(404).send("Order not found");
     }
 
     // send an email
