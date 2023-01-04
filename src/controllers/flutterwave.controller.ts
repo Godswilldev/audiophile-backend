@@ -59,15 +59,15 @@ export const flwWebhook = async (req: Request, res: Response) => {
     // This request isn't from Flutterwave; discard
     return res.status(401).send("Webhook error");
   }
+console.log(req.body)
+  const { status, txRef:orderId} = req.body;
 
-  const { event, data } = req.body;
 
-  console.log({ event, data });
 
-  if (event === "charge.completed" || event === "completed") {
+  if (status === "successful") {
     // change order status to OrderStatus.confirmed,
 
-    const { tx_ref: orderId } = data;
+ 
 
     const order = await Order.findByIdAndUpdate(orderId, { orderStatus: OrderStatus.confirmed });
 
