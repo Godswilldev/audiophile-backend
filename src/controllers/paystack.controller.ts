@@ -36,11 +36,7 @@ export const getPaystackCheckoutSession = async (
       amount: order.grandTotal * 100,
       callback_url: "https://audiophi.vercel.app/user/order/order-success",
       currency: "NGN",
-      customer: {
-        email: user.email,
-        first_name: `${user.firstname}`,
-        last_name: `${user.lastname}`,
-      },
+      email: user.email,
 
       channels: ["card", "bank", "ussd", "qr", "mobile_money", "bank_transfer"],
 
