@@ -32,7 +32,7 @@ export const getPaystackCheckoutSession = async (
     },
 
     data: {
-      ref: order.id,
+      reference: order.id,
       amount: order.grandTotal * 100,
       callback_url: "https://audiophi.vercel.app/user/order/order-success",
       currency: "NGN",
