@@ -65,6 +65,9 @@ export const paystackWebhook = async (req: Request, res: Response) => {
     .update(JSON.stringify(req.body))
     .digest("hex");
 
+  console.log(signature);
+  console.log(hash);
+
   if (hash !== signature) {
     // This request isn't from Paystack; discard
     return res.status(401).send("Webhook error");
