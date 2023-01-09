@@ -32,9 +32,9 @@ export const getPaystackCheckoutSession = async (
     },
 
     data: {
-      key: `${process.env.PAYSTACK_PUBLIC_KEY}`,
       ref: order.id,
       amount: order.grandTotal * 100,
+      callback_url: "https://audiophi.vercel.app/user/order/order-success",
       currency: "NGN",
       customer: {
         email: user.email,
@@ -44,7 +44,16 @@ export const getPaystackCheckoutSession = async (
 
       channels: ["card", "bank", "ussd", "qr", "mobile_money", "bank_transfer"],
 
-      metadata: { orderDetails: order.orderItems, shippingInfo: order.shippingInfo },
+      metadata: {
+        cart_id: order.id,
+        custom_fields: order.orderItems.map((ord) => {
+          return {
+            display_name: ord.product.name,
+            variable_name: ord.product.slug,
+            value: ord.product.price * ord.quantity,
+          };
+        }),
+      },
     },
   });
   return res.status(200).json(data);
