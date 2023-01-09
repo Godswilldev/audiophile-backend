@@ -30,9 +30,7 @@ export const getCheckoutsession = async (req: Request, res: Response, next: Next
       tx_ref: order._id,
       amount: order.grandTotal,
       currency: "NGN",
-      redirect_url: "https://audiophi.vercel.app/user/my-orders", // TODO: REPLACE WITH WEBHOOK URL WHEN THE SITE IS LIVE
-      // redirect_url: "http://localhost:3000", // TODO: REPLACE WITH WEBHOOK URL WHEN THE SITE IS LIVE
-
+      redirect_url: "https://audiophi.vercel.app/user/order/order-success",
       customer: {
         email: user.email,
         name: `${user.firstname} ${user.lastname}`,
@@ -59,15 +57,11 @@ export const flwWebhook = async (req: Request, res: Response) => {
     // This request isn't from Flutterwave; discard
     return res.status(401).send("Webhook error");
   }
-console.log(req.body)
-  const { status, txRef:orderId} = req.body;
-
-
+  console.log(req.body);
+  const { status, txRef: orderId } = req.body;
 
   if (status === "successful") {
     // change order status to OrderStatus.confirmed,
-
- 
 
     const order = await Order.findByIdAndUpdate(orderId, { orderStatus: OrderStatus.confirmed });
 

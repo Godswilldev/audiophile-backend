@@ -27,7 +27,7 @@ ordersRouter
 
 ordersRouter
   .route("/:id")
-  .get(restrictTo([roles.admin, roles.manager]), catchAsync(getOrder))
+  .get(catchAsync(getOrder))
   .patch(restrictTo([roles.admin]), catchAsync(updateOrder))
   .delete(restrictTo([roles.admin]), catchAsync(deleteOrder));
 
