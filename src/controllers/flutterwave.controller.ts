@@ -28,6 +28,7 @@ export const getCheckoutsession = async (req: Request, res: Response, next: Next
 
     data: {
       tx_ref: order._id,
+      txRef: order._id,
       amount: order.grandTotal,
       currency: "NGN",
       redirect_url: "https://audiophi.vercel.app/user/order/order-success",
