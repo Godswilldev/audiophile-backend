@@ -8,16 +8,18 @@ import {
   deleteOrder,
   getAllOrders,
 } from "../controllers/orders.controller";
-import { catchAsync } from "../middlewares/catchAsyncError.middleware";
-import { getCheckoutsession } from "../controllers/flutterwave.controller";
 import { roles } from "../interface/user.interface";
+import { catchAsync } from "../middlewares/catchAsyncError.middleware";
+import { getFlutterwaveCheckoutSession } from "../controllers/flutterwave.controller";
+import { getPaystackCheckoutSession } from "../controllers/paystack.controller";
 
 const ordersRouter = Router();
 
 // PROTECT ALL ORDER ROUTES
 ordersRouter.use(catchAsync(protect));
 
-ordersRouter.route("/checkout-session").post(catchAsync(getCheckoutsession));
+ordersRouter.route("/flutterwave-checkout-session").post(catchAsync(getFlutterwaveCheckoutSession));
+ordersRouter.route("/paystack-checkout-session").post(catchAsync(getPaystackCheckoutSession));
 ordersRouter.route("/my-orders").get(catchAsync(getUserOrder));
 
 ordersRouter

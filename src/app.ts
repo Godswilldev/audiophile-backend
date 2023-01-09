@@ -15,6 +15,7 @@ import mongoSanitize from "express-mongo-sanitize";
 import productsRouter from "./routes/product.route";
 import { flwWebhook } from "./controllers/flutterwave.controller";
 import { AppError } from "./middlewares/handleAppError.middleware";
+import { paystackWebhook } from "./controllers/paystack.controller";
 import { globalErrorHandler } from "./controllers/handleAppError.controller";
 
 // initialize app
@@ -65,6 +66,9 @@ app.use(compression());
 // FLUTTERWAVE WEBHOOK
 // app.post("/flw-checkout", express.raw({ type: "application/json" }), flwWebhook);
 app.post("/flw-webhook", flwWebhook);
+
+// PAYSTACK WEBHOOK
+app.post("/paystack-webhook", paystackWebhook);
 
 // API Routes
 app.use("/api/v1/auth", authRouter);

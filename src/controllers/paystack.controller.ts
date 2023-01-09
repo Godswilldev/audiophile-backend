@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 import "dotenv/config";
 import axios from "axios";
+import crypto from "crypto";
 import Order from "../models/orders.model";
 import { Email } from "../utils/email.util";
 import { Response, Request, NextFunction } from "express";
@@ -8,7 +9,7 @@ import { OrderStatus } from "../interface/orders.interface";
 import { AppError } from "../middlewares/handleAppError.middleware";
 
 // GET FLUTTERWAVE CHECKOUT SESSION
-export const getFlutterwaveCheckoutSession = async (
+export const getPaystackCheckoutSession = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -24,51 +25,55 @@ export const getFlutterwaveCheckoutSession = async (
 
   const { data } = await axios({
     method: "post",
-    url: "https://api.flutterwave.com/v3/payments",
+    url: "https://api.paystack.co/transaction/initialize",
 
     headers: {
-      Authorization: `Bearer ${process.env.FLW_SECRET_KEY}`,
+      Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
     },
 
     data: {
-      tx_ref: order.id,
-      txRef: order.id,
-      amount: order.grandTotal,
+      key: `${process.env.PAYSTACK_PUBLIC_KEY}`,
+      ref: order.id,
+      amount: order.grandTotal * 100,
       currency: "NGN",
-      redirect_url: "https://audiophi.vercel.app/user/order/order-success",
       customer: {
         email: user.email,
-        name: `${user.firstname} ${user.lastname}`,
+        first_name: `${user.firstname}`,
+        last_name: `${user.lastname}`,
       },
 
-      meta: { orderDetails: order.orderItems, shippingInfo: order.shippingInfo },
+      channels: ["card", "bank", "ussd", "qr", "mobile_money", "bank_transfer"],
 
-      customizations: {
-        title: "Audiophile",
-        logo: req.user.photo,
-      },
+      metadata: { orderDetails: order.orderItems, shippingInfo: order.shippingInfo },
     },
   });
   return res.status(200).json(data);
 };
 
-// FLUTTERWAVE CHECKOUT WEBHOOK
-export const flwWebhook = async (req: Request, res: Response) => {
-  // If you specified a secret hash, check for the signature
-  const secretHash = process.env.FLW_SECRET_HASH;
-  const signature = req.headers["verif-hash"];
+// PAYSTACK CHECKOUT WEBHOOK
+export const paystackWebhook = async (req: Request, res: Response) => {
+  const secret = process.env.PAYSTACK_SECRET_KEY;
+  const signature = req.headers["x-paystack-signature"];
 
-  if (!signature || signature !== secretHash) {
-    // This request isn't from Flutterwave; discard
+  const hash = crypto
+    .createHmac("sha512", secret as string)
+    .update(JSON.stringify(req.body))
+    .digest("hex");
+
+  if (hash !== signature) {
+    // This request isn't from Paystack; discard
     return res.status(401).send("Webhook error");
   }
-  console.log(req.body);
-  const { status, txRef: orderId } = req.body;
 
-  if (status === "successful") {
+  console.log(req.body);
+  const { event, data } = req.body;
+
+  if (event === "charge.success") {
     // change order status to OrderStatus.confirmed,
 
-    const order = await Order.findByIdAndUpdate(orderId, { orderStatus: OrderStatus.confirmed });
+    const order = await Order.findByIdAndUpdate(data.reference, {
+      orderStatus: OrderStatus.confirmed,
+    });
 
     if (!order) {
       return res.status(404).send("Order not found");
