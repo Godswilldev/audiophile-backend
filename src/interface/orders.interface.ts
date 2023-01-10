@@ -26,6 +26,7 @@ export interface OrderProps {
 
   shippingFee: number;
   productsTotal: number;
+  vat: number;
   grandTotal: number;
 }
 

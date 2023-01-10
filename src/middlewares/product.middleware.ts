@@ -53,7 +53,6 @@ export const resizeAndUploadProductPhotos = async (
   const ContentType = files.image[0].mimetype;
 
   const Body = await sharp(files.image[0].buffer)
-    .resize(2000, 1333)
     .toFormat("webp")
     .webp({ quality: 100 })
     .toBuffer();
@@ -68,7 +67,6 @@ export const resizeAndUploadProductPhotos = async (
   const ContentType2 = files.categoryImage[0].mimetype;
 
   const Body2 = await sharp(files.categoryImage[0].buffer)
-    .resize(2000, 1333)
     .toFormat("webp")
     .webp({ quality: 100 })
     .toBuffer();
@@ -86,11 +84,7 @@ export const resizeAndUploadProductPhotos = async (
       const ContentType = file.mimetype;
 
       // resize the image
-      const Body = await sharp(file.buffer)
-        .resize(2000, 1333)
-        .toFormat("webp")
-        .webp({ quality: 100 })
-        .toBuffer();
+      const Body = await sharp(file.buffer).toFormat("webp").webp({ quality: 100 }).toBuffer();
 
       // upload to s3
       const fileUrl = await uploadToS3({ Body, Key, ContentType });
