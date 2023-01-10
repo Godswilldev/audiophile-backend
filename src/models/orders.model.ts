@@ -74,13 +74,13 @@ ordersSchema.pre("save", async function () {
 
   this.shippingFee = this.orderItems.reduce(
     (acc, next, _, array) =>
-      Math.round(((acc += next.quantity * next.product.price) * array.length) / 100),
+      Math.round(((acc += next.quantity * next.product.price) * array.length) / 10),
     0
   );
 
   this.vat = this.orderItems.reduce(
     (acc: number, next: { quantity: number; product: { price: number } }) =>
-      Math.round((acc += next.quantity * next.product.price) * 0.01),
+      Math.round((acc += next.quantity * next.product.price) * 0.1),
     0
   );
   this.grandTotal = parseInt((this.shippingFee + total + this.vat).toFixed(0));
