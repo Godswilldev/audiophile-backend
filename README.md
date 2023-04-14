@@ -1,6 +1,6 @@
 # Introduction
 
-Backend API for Audiophile E-commerce frontend
+Backend API for Audiophile E-commerce frontend.
 
 ## Description
 
